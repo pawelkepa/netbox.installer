@@ -1,2 +1,2 @@
 # netbox.installer
-auto install netbox in ubuntu 20.04
+auto install netbox in ubuntu server
