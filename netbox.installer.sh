@@ -90,7 +90,7 @@ rm -rf /opt/netbox/ &> /dev/null
 # CLONE MAIN REPOSITORY IN SYSTEM # ----------------------------------------------------------------------------------------------------------------------- #
 cd /opt/
 git clone -b master https://github.com/digitalocean/netbox.git
-[ ! -d netbox ] && echo -e "[>] CANNOT ACCESS '/opt/netbox': NO SUCH DIRECTORY"
+[ ! -d netbox ] && echo -e "[>] CANNOT ACCESS '/opt/netbox': NO SUCH DIRECTORY" && exit 1
 # --------------------------------------------------------------------------------------------------------------------------------------------------------- #
 
 
