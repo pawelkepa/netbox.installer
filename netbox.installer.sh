@@ -39,7 +39,7 @@ apt-get clean
 
 
 # INSTALL POSTGRESQL DATABASE # --------------------------------------------------------------------------------------------------------------------------- #
-apt-get install -y git
+apt-get install -y git net-tools
 apt-get install -y postgresql libpq-dev
 apt-get install -y postgresql-contrib
 # --------------------------------------------------------------------------------------------------------------------------------------------------------- #
