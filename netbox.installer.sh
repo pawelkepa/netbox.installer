@@ -23,7 +23,13 @@ fi
 
 # CHECK OS RELEASE # -------------------------------------------------------------------------------------------------------------------------------------- #
 release=$(lsb_release -sc)
-[ "$release" != "focal" ] && echo -e "[>] UBUNTU CODE NAME ITS NOT FOCAL" && exit 1
+if [ "$release" = "focal" ] ; then
+    echo
+elif [ "$release" = "bionic" ] ; then
+    echo
+else
+    echo -e "[>] UBUNTU CODE NAME ITS NOT FOCAL OR BIONIC" && exit 1
+fi
 # --------------------------------------------------------------------------------------------------------------------------------------------------------- #
 
 
