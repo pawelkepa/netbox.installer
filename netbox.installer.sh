@@ -1,5 +1,15 @@
 #! /bin/bash
-
+# Programming and idea by : Iman Homayouni
+# Gitbub : https://github.com/iman-homayouni
+# Email : homayouni.iman@Gmail.com
+# Website : http://www.homayouni.info
+# License : GPL v2.0
+# Last update : 11-March-2021_19:53:05
+# netbox.installer v1.0.1
+# --------------------------------------------------------------------------------------------------------------------------------------------------------- #
+# SUCCESSFULLY TESTED IN UBUNTU 18.04 [BIONIC]
+# SUCCESSFULLY TESTED IN UBUNTU 20.04 [FOCAL]
+# --------------------------------------------------------------------------------------------------------------------------------------------------------- #
 
 
 # USAGE FUNCTION # ---------------------------------------------------------------------------------------------------------------------------------------- #
