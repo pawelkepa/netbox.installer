@@ -73,8 +73,18 @@ su - postgres -c "psql -c 'CREATE DATABASE netbox;'"
 clear
 
 if [ -z "$1" ] ; then
-    password="$RANDOM$RANDOM"
-    touch $password.databasepassword
+    if [ -f databasepassword.txt ] ; then
+        password=$(cat databasepassword.txt)
+        if [ -z "$password" ] ; then
+            touch databasepassword.txt
+            password="$RANDOM$RANDOM"
+            echo "$password" > databasepassword.txt
+        fi
+    else
+        touch databasepassword.txt
+        password="$RANDOM$RANDOM"
+        echo "$password" > databasepassword.txt
+    fi
 else
     echo -en "[>] CREATE USER netbox WITH PASSWORD. ENTER YOUR PASSWORD : " ; read password
 fi
@@ -416,18 +426,22 @@ systemctl status nginx
 
 
 
+# MOVE DATABASE PASSWORD FILE TO /OPT/NETBOX #
+mv databasepassword.txt /opt/netbox/
+# --------------------------------------------------------------------------------------------------------------------------------------------------------- #
+
+
+
 # PRINT RESULT IN TERMINAL # ------------------------------------------------------------------------------------------------------------------------------ #
 reset
 echo -e "\e[92m[>] ----------------------------------------------------------------- [<]"
 echo -e "[>] DATABASE USERNAME IS : netbox"
 echo -e "[>] DATABASE PASSWORD IS : $password"
-echo -e "[>] DATABASE IS AVAILABLE IN $password.databasepassword"
+echo -e "[>] DATABASE PASSWORD FILE AVAILABLE IN /opt/netbox/databasepassword.txt"
 echo -e "[>] ----------------------------------------------------------------- [<]"
-if [ -z "$1" ] ; then
-    echo -e "[>] NETBOX PANEL USERNAME IS : admin"
-    echo -e "[>] NETBOX PANEL PASSWORD IS : admin"
-    echo -e "[>] NETBOX PANEL EMAIL IS : admin@local.host"
-fi
+echo -e "[>] NETBOX PANEL USERNAME IS : admin"
+echo -e "[>] NETBOX PANEL PASSWORD IS : admin"
+echo -e "[>] NETBOX PANEL EMAIL IS : admin@local.host"
 echo -e "[>] NETBOX PANEL URL : http://$server_ip/"
 echo -e "[>] ----------------------------------------------------------------- [<]\e[0m"
 # --------------------------------------------------------------------------------------------------------------------------------------------------------- #
