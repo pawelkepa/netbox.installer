@@ -426,22 +426,32 @@ systemctl status nginx
 
 
 
-# MOVE DATABASE PASSWORD FILE TO /OPT/NETBOX #
-mv databasepassword.txt /opt/netbox/
+# CREATE DATABASE PASSWORD FILE IN /OPT/NETBOX # ---------------------------------------------------------------------------------------------------------- #
+echo "$password" > /opt/netbox/databasepassword.txt
+# --------------------------------------------------------------------------------------------------------------------------------------------------------- #
+
+
+
+# CREATE HEADER FOR SSH CONNECTION # ---------------------------------------------------------------------------------------------------------------------- #
+cat << EOF > /etc/motd
+"[>] ------------------------------------------------------------------------- [<]"
+"[>] DATABASE USERNAME IS : netbox"
+"[>] DATABASE PASSWORD IS : $password"
+"[>] DATABASE PASSWORD FILE AVAILABLE IN /opt/netbox/databasepassword.txt"
+"[>] ------------------------------------------------------------------------- [<]"
+"[>] NETBOX PANEL USERNAME IS : admin"
+"[>] NETBOX PANEL PASSWORD IS : admin"
+"[>] NETBOX PANEL EMAIL IS : admin@local.host"
+"[>] NETBOX PANEL URL : http://$server_ip/"
+"[>] ------------------------------------------------------------------------- [<]"
+EOF
 # --------------------------------------------------------------------------------------------------------------------------------------------------------- #
 
 
 
 # PRINT RESULT IN TERMINAL # ------------------------------------------------------------------------------------------------------------------------------ #
 reset
-echo -e "\e[92m[>] ----------------------------------------------------------------- [<]"
-echo -e "[>] DATABASE USERNAME IS : netbox"
-echo -e "[>] DATABASE PASSWORD IS : $password"
-echo -e "[>] DATABASE PASSWORD FILE AVAILABLE IN /opt/netbox/databasepassword.txt"
-echo -e "[>] ----------------------------------------------------------------- [<]"
-echo -e "[>] NETBOX PANEL USERNAME IS : admin"
-echo -e "[>] NETBOX PANEL PASSWORD IS : admin"
-echo -e "[>] NETBOX PANEL EMAIL IS : admin@local.host"
-echo -e "[>] NETBOX PANEL URL : http://$server_ip/"
-echo -e "[>] ----------------------------------------------------------------- [<]\e[0m"
+echo -en "\e[92m"
+cat /etc/motd
+echo -en "\e[0m"
 # --------------------------------------------------------------------------------------------------------------------------------------------------------- #
