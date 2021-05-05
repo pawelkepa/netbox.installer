@@ -15,8 +15,8 @@
 
 # USAGE FUNCTION # ---------------------------------------------------------------------------------------------------------------------------------------- #
 function usage {
-    echo -e "$0 -s [SILENT MODE]"
-    echo -e "$0 [NORMAL INSTALLATION]"
+    echo -e "$0 [SILENT MODE - DEFAULT USERNAME AND PASSWORD]"
+    echo -e "$0 -f [ASK USERNAME AND PASSWORD]"
     echo -e "$0 -h [HELP USAGE]"
 }
 # --------------------------------------------------------------------------------------------------------------------------------------------------------- #
@@ -72,7 +72,7 @@ su - postgres -c "psql -c 'CREATE DATABASE netbox;'"
 # SET PASSWORD FOR USER NETBOX # -------------------------------------------------------------------------------------------------------------------------- #
 clear
 
-if [ "$1" = "-s" ] ; then
+if [ -z "$1" ] ; then
     password="$RANDOM$RANDOM"
     touch $password.databasepassword
 else
@@ -167,7 +167,7 @@ sed -i "${line_number}d" configuration.py
 # CHANGE configuration.py FILE # -------------------------------------------------------------------------------------------------------------------------- #
 clear
 
-if [ "$1" = "-s" ] ; then
+if [ -z "$1" ] ; then
     server_ip=$(ifconfig | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p')
 else
     echo -en "[>] ENTER YOU SERVER IP ADDRESS : " ; read server_ip
@@ -225,21 +225,97 @@ python3 manage.py migrate
 
 
 # CREATE SUPER USER IN NETBOX # --------------------------------------------------------------------------------------------------------------------------- #
-if [ "$1" = "-s" ] ; then
+if [ -z "$1" ] ; then
     echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('admin', 'admin@local.host', 'admin')" \
-    | python manage.py shell
+    | python manage.py shell 2> /dev/null
 else
-    clear
 
-    echo -e "[>] ----------------------------------------------------------------- [<]"
-    echo -e "[>] Example:"
-    echo -e "Username (leave blank to use 'root'): netboxadmin"
-    echo -e "Email address: hitjethva@gmail.com"
-    echo -e "Password: "
-    echo -e "Password (again): "
-    echo -e "Superuser created successfully."
-    echo -e "[>] ----------------------------------------------------------------- [<]"
-    python3 manage.py createsuperuser
+    for (( ;; )) ; do
+
+        for (( ;; )) ; do
+            # CLEAN UP TERMINAL # ------------------------------------------------------------------------------------------------------------------------- #
+            clear
+            # --------------------------------------------------------------------------------------------------------------------------------------------- #
+
+
+
+            # PRINT QUESTION IN TERMINAL # ---------------------------------------------------------------------------------------------------------------- #
+            echo -e "[>] ----------------------------------------------------------------------------------- [<]"
+            echo -en "[>] Enter your netbox username [admin] : " ; read manage_username
+
+            if [ -z "$manage_username" ] ; then
+                echo "[>] username variables is empty"
+                sleep 3
+            else
+                break
+            fi
+            # --------------------------------------------------------------------------------------------------------------------------------------------- #
+        done
+
+
+
+        for (( ;; )) ; do
+            # PRINT QUESTION IN TERMINAL # ---------------------------------------------------------------------------------------------------------------- #
+            echo -en "[>] Enter your netbox password [admin] : " ; read manage_password
+
+            if [ -z "$manage_password" ] ; then
+                echo "[>] password variables is empty"
+                sleep 3
+            else
+                break
+            fi
+            # --------------------------------------------------------------------------------------------------------------------------------------------- #
+        done
+
+
+
+        for (( ;; )) ; do
+            # PRINT QUESTION IN TERMINAL # ---------------------------------------------------------------------------------------------------------------- #
+            echo -en "[>] Enter your netbox email address [admin@local.host] : " ; read manage_email
+
+            if [ -z "$manage_email" ] ; then
+                echo "[>] email variables is empty"
+                sleep 3
+            else
+                break
+            fi
+            # --------------------------------------------------------------------------------------------------------------------------------------------- #
+        done
+
+
+
+        # CLEAN UP TERMINAL # ----------------------------------------------------------------------------------------------------------------------------- #
+        clear
+        # ------------------------------------------------------------------------------------------------------------------------------------------------- #
+
+
+
+        # PRINT INFORMATION IN TERMINAL # ----------------------------------------------------------------------------------------------------------------- #
+        echo -e "[>] ----------------------------------------------------------------------------------- [<]"
+        echo -e "[>] Your netbox username : $manage_username"
+        echo -e "[>] Your netbox password : $manage_password"
+        echo -e "[>] Your netbox email address : $manage_email"
+        echo -en "[>] IS THAT CORRECT ? [y/n] : " ; read q
+
+        if [ "$q" = "y" ] ; then
+            break
+        fi
+        # ------------------------------------------------------------------------------------------------------------------------------------------------- #
+    done
+
+
+
+    # PRINT SEPRATOR IN TERMINAL # ------------------------------------------------------------------------------------------------------------------------ #
+    echo -e "[>] ----------------------------------------------------------------------------------- [<]"
+    # ----------------------------------------------------------------------------------------------------------------------------------------------------- #
+
+
+
+    # CREATE SUPER USER IN NETBOX # ----------------------------------------------------------------------------------------------------------------------- #
+    echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser(\"$manage_username\", \"$manage_email\", \"$manage_password\")" \
+    | python manage.py shell 2> /dev/null
+    # ----------------------------------------------------------------------------------------------------------------------------------------------------- #
+
 fi
 # --------------------------------------------------------------------------------------------------------------------------------------------------------- #
 
@@ -347,7 +423,7 @@ echo -e "[>] DATABASE USERNAME IS : netbox"
 echo -e "[>] DATABASE PASSWORD IS : $password"
 echo -e "[>] DATABASE IS AVAILABLE IN $password.databasepassword"
 echo -e "[>] ----------------------------------------------------------------- [<]"
-if [ "$1" = "-s" ] ; then
+if [ -z "$1" ] ; then
     echo -e "[>] NETBOX PANEL USERNAME IS : admin"
     echo -e "[>] NETBOX PANEL PASSWORD IS : admin"
     echo -e "[>] NETBOX PANEL EMAIL IS : admin@local.host"
