@@ -4,7 +4,7 @@
 # Email : homayouni.iman@Gmail.com
 # Website : http://www.homayouni.info
 # License : GPL v2.0
-# Last update : Wed, 05 May 2021 14:08:53 +0430
+# Last update : Sun, 13 Jun 2021 18:25:16 +0430
 # netbox.installer v1.0.2
 # --------------------------------------------------------------------------------------------------------------------------------------------------------- #
 # SUCCESSFULLY TESTED IN UBUNTU 18.04 [BIONIC]
